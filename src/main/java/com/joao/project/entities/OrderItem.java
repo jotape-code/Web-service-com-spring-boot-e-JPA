@@ -2,6 +2,7 @@ package com.joao.project.entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.joao.project.entities.pk.OrderItemPk;
 
 import jakarta.persistence.EmbeddedId;
@@ -14,14 +15,14 @@ public class OrderItem implements Serializable{
     private static final long serialVersionUID = 1L;
     
     @EmbeddedId
-    private OrderItemPk id;
+    private OrderItemPk id = new OrderItemPk();
 
     private Integer quantity;
     private Double price;
 
     public OrderItem(){
     }
-    public OrderItem(Integer quantity, Double price, Product product, Order order){
+    public OrderItem(Order order, Product product, Integer quantity, Double price){
         id.setOrder(order);
         id.setProduct(product);
         this.quantity = quantity;
@@ -39,12 +40,14 @@ public class OrderItem implements Serializable{
     public void setPrice(Double price){
         this.price = price;
     }
+    @JsonIgnore
     public Product getProduct(){
         return id.getProduct();
     }
     public void setProduct(Product product){
         id.setProduct(product);
     }
+    @JsonIgnore
     public Order getOrder(){
         return id.getOrder();
     }
